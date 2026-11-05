@@ -124,7 +124,7 @@ function App() {
   useEffect(() => {
     let cancelled = false
 
-    fetch('http://localhost:5000/api/health')
+    fetch('https://bharattrade-ai-9oz3.onrender.com/api/health')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Backend connection failed')
@@ -156,7 +156,7 @@ function App() {
     const fetchStocks = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/price-shockers?_=${Date.now()}`
+          `https://bharattrade-ai-9oz3.onrender.com/api/price-shockers?_=${Date.now()}`
         )
 
         if (!response.ok) {

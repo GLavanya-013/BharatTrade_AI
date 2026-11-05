@@ -1,0 +1,22 @@
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Backend secrets
+backend/.env
+backend/.env.*
+
+# Frontend secrets
+frontend/.env
+frontend/.env.*
+
+# Dependencies
+node_modules/
+
+# Build files
+dist/
+build/
+
+# Logs
+*.log

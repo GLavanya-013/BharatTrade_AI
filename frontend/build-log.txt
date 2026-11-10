@@ -1,0 +1,4 @@
+Missing VITE_TURNSTILE_SITE_KEY in environment variables.
+Login
+Create Account
+CAPTCHA site key is missing. Please add VITE_TURNSTILE_SITE_KEY to .env.local.

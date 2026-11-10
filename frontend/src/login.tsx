@@ -6,6 +6,7 @@ import './login.css'
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
     const [captchaToken, setCaptchaToken] = useState('')
@@ -31,7 +32,7 @@ export default function Login() {
         }
 
         if (!siteKey) {
-            setMessage('CAPTCHA site key is missing. Please add VITE_TURNSTILE_SITE_KEY to .env.local.')
+            setMessage('CAPTCHA site key is missing. Please add VITE_TURNSTILE_SITE_KEY to environment variables.')
             return
         }
 
@@ -80,7 +81,7 @@ export default function Login() {
         }
 
         if (!siteKey) {
-            setMessage('CAPTCHA site key is missing. Please add VITE_TURNSTILE_SITE_KEY to .env.local.')
+            setMessage('CAPTCHA site key is missing. Please add VITE_TURNSTILE_SITE_KEY to environment variables.')
             return
         }
 
@@ -177,17 +178,64 @@ export default function Login() {
                         Password
                     </label>
 
-                    <input
-                        id="login-password"
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e) => {
-                            setPassword(e.target.value)
-                        }}
-                        autoComplete="current-password"
-                        required
-                    />
+                    <div className="password-input-wrapper">
+                        <input
+                            id="login-password"
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value)
+                            }}
+                            autoComplete="current-password"
+                            required
+                        />
+
+                        <button
+                            type="button"
+                            className="password-toggle-btn"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            title={showPassword ? 'Hide password' : 'Show password'}
+                            aria-pressed={showPassword}
+                        >
+                            {showPassword ? (
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                                    <line x1="2" x2="22" y1="2" y2="22" />
+                                </svg>
+                            ) : (
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
 
                     <div
                         style={{
@@ -229,11 +277,11 @@ export default function Login() {
                                     setMessage('CAPTCHA expired. Please complete it again.')
                                 }}
                                 onError={(error) => {
-                                    console.error('CAPTCHA error:', error)
+                                    console.error('CAPTCHA error:', error, 'Hostname:', window.location.hostname, 'SiteKey:', siteKey)
                                     resetCaptcha()
                                     if (error === '110200') {
                                         setMessage(
-                                            'CAPTCHA domain unauthorized (110200). Ensure the current domain is added in Cloudflare Turnstile hostnames.'
+                                            `CAPTCHA domain unauthorized (110200) for "${window.location.hostname}". Ensure this exact domain is listed in Cloudflare Turnstile for sitekey: ${siteKey}`
                                         )
                                     } else {
                                         setMessage('CAPTCHA failed to load. Please refresh.')

@@ -37,8 +37,7 @@ export default function Login() {
         }
 
         // Get the latest fresh token from the Turnstile widget directly or state
-        const activeToken = (turnstileRef.current?.getResponse() || captchaToken)?.trim()
-
+        const activeToken = captchaToken.trim()
         if (!activeToken) {
             setMessage('Please complete the CAPTCHA.')
             return
